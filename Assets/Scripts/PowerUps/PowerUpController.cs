@@ -10,7 +10,8 @@ public class PowerUpController : MonoBehaviour
     {
         JumpPowerUp,
         SpeedUpPowerUp,
-        FireProofPowerUp
+        FireProofPowerUp,
+        RandomizerPowerup
     }
 
     public POWERUPS[] powerTypes;

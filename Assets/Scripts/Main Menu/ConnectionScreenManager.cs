@@ -30,9 +30,7 @@ public class ConnectionScreenManager : MonoBehaviour
     
     public void Start()
     {
-        MAIN_GAME_CONTROLLER = MAIN_GAME_CONTROLLER_OBJECT.GetComponent<MainGameController>();
-        selected_name = "Host";
-        MAIN_GAME_CONTROLLER.set_name_and_color(selected_name, selected_color);
+        
         StartCoroutine(CheckIP());
         if ( update_player_list == false)
         {
@@ -44,7 +42,10 @@ public class ConnectionScreenManager : MonoBehaviour
 
     public void start_host()
     {
+        MAIN_GAME_CONTROLLER_OBJECT = GameObject.Find("Main Game Controller");
         MAIN_GAME_CONTROLLER = MAIN_GAME_CONTROLLER_OBJECT.GetComponent<MainGameController>();
+        selected_name = "Host";
+        MAIN_GAME_CONTROLLER.set_name_and_color(selected_name, selected_color);
         MAIN_GAME_CONTROLLER.start_host();
         port = MAIN_GAME_CONTROLLER.get_port();
     }
@@ -55,6 +56,9 @@ public class ConnectionScreenManager : MonoBehaviour
             PLAYER_NAME.placeholder.GetComponent<Text>().text = "Name Cannot Be Blank";
         else
         {
+            MAIN_GAME_CONTROLLER_OBJECT = GameObject.Find("Main Game Controller");
+            MAIN_GAME_CONTROLLER = MAIN_GAME_CONTROLLER_OBJECT.GetComponent<MainGameController>();
+            MAIN_GAME_CONTROLLER.set_name_and_color(selected_name, selected_color);
             connection_address = CONNECTION_INFO.text;
             if (connection_address == "")
                 connection_address = ip;
@@ -90,7 +94,7 @@ public class ConnectionScreenManager : MonoBehaviour
             text = text.Substring(0, text.IndexOf("<"));
             ip = text;
             if (update_player_list)
-                SERVER_INFO_TEXTBOX.text = "Your IP Address:\n" + ip + ":" + port.ToString();
+                SERVER_INFO_TEXTBOX.text = "Your IP Address:\n" + ip;
         }
     }
 

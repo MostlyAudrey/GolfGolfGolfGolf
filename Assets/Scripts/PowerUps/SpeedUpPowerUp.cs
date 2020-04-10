@@ -6,7 +6,7 @@ public class SpeedUpPowerUp : PowerUp
 {
     public string name { get; set; }
 
-    public float SPEED_POWER = 1.5f;
+    public float SPEED_POWER = 15f;
     public SpeedUpPowerUp()
     {
         this.name = "Speed Up";

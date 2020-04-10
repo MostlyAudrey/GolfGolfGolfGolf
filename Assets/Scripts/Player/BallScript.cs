@@ -4,7 +4,7 @@ using Mirror;
 public class BallScript : NetworkBehaviour
 {
     public GameObject ENTITY;
-    public float SPEED_UP_SPEED = 1.5f;
+    public float SPEED_UP_SPEED = 10f;
     public float FIRE_FORCE = 15f;
     public float coolDownTimer = 0;
 
@@ -36,16 +36,12 @@ public class BallScript : NetworkBehaviour
             collider.gameObject.GetComponent<PowerUpController>().PickUp();
             ENTITY.GetComponent<PlayerScript>().pickedUpPowerUp(powerUpType);
         }
-        
         else if (collider.gameObject.tag == "SpeedUp")
         {
             Debug.Log("speeding up");
-            
-
-            Vector3 ball_direction = GetComponent<Rigidbody>().velocity / GetComponent<Rigidbody>().velocity.magnitude;
+            Vector3 ball_direction = collider.gameObject.transform.rotation.eulerAngles / collider.gameObject.transform.rotation.eulerAngles.magnitude;
             GetComponent<Rigidbody>().AddForce( ball_direction * SPEED_UP_SPEED, ForceMode.Impulse);
         }
-        
         else if (collider.gameObject.tag == "Fire")
         {
             if (ENTITY.GetComponent<PlayerScript>().isUsingFireProof())

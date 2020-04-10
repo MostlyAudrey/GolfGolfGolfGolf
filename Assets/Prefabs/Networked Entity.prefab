@@ -73,25 +73,28 @@ MonoBehaviour:
   syncInterval: 0.1
   CAMERA_OBJ: {fileID: 8900100290165989557}
   ROTATOR: {fileID: 8111257610776812306}
+  CAM_PARENT: {fileID: 8900100290165989557}
   CLUB_MODEL: {fileID: 8111257611005552941}
   GOLF_CLUB: {fileID: 8111257610540916684}
   BALL: {fileID: 8111257610857308473}
   POINTER: {fileID: 8111257610626238059}
-  WORLD_MANAGER: {fileID: 0}
   PLAYER_NAME: Host
   BALL_COLOR: {r: 0, g: 0, b: 0, a: 0}
-  TIME_TILL_DEATH: 2.5
+  TIME_TILL_DEATH: 5
   THRUST_MULTIPLIER: 25
-  ROTATE_STRENGTH: 35
+  ROTATE_STRENGTH: 60
   MAX_STRENGTH: 50
   STRENGTH_THRESHOLD: 1
   POINTER_LENGTH: 0.005
   HIT_TIMER: 0.05
   BALL_STOPPING_SPEED: 0.5
   play_state: 0
-  score: 0
+  score: -1
+  managers: {fileID: 0}
+  last_ball_pos: {x: 0, y: 0, z: 0}
   last_valid_position: {x: 0, y: 0, z: 0}
   in_death_zone: 0
+  actual_time_swinging: 0
 --- !u!114 &668851320573419038
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -25,27 +25,29 @@ public class MainGameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (players_hash.Count != NETWORK_MANAGER.numPlayers)
+        if (NetworkServer.active || NetworkClient.active)
         {
-            players_hash.Clear();
-            foreach (GameObject networked_entity in GameObject.FindGameObjectsWithTag("Client"))
+            if (players_hash.Count != NETWORK_MANAGER.numPlayers)
             {
-                players_hash.Add(networked_entity.GetComponent<NetworkIdentity>(), networked_entity);
-                if (networked_entity.GetComponent<NetworkIdentity>().hasAuthority)
+                players_hash.Clear();
+                foreach (GameObject networked_entity in GameObject.FindGameObjectsWithTag("Client"))
                 {
-                    local_player = networked_entity;
-                    set_name_and_color(name, color);
-                }
-            };
-        }
-        if (local_player == false)
-            refresh_player_list();
+                    players_hash.Add(networked_entity.GetComponent<NetworkIdentity>(), networked_entity);
+                    if (networked_entity.GetComponent<NetworkIdentity>().hasAuthority)
+                    {
+                        local_player = networked_entity;
+                        set_name_and_color(name, color);
+                    }
+                };
+            }
+            if (local_player == false)
+                refresh_player_list();
 
-        if ( last_scene != NetworkManager.networkSceneName)
-        {
-            last_scene = NetworkManager.networkSceneName;
+            if (last_scene != NetworkManager.networkSceneName)
+            {
+                last_scene = NetworkManager.networkSceneName;
+            }
         }
-
     }
 
     public void refresh_player_list()
@@ -83,4 +85,40 @@ public class MainGameController : MonoBehaviour
     public void stop_host() { NETWORK_MANAGER.StopHost(); }
     public void start_client(string address) { NETWORK_MANAGER.StartClient(); NETWORK_MANAGER.networkAddress = address; }
     public void stop_client() { NETWORK_MANAGER.StopClient(); }
+
+    /*string myLog;
+    Queue myLogQueue = new Queue();
+    void OnEnable()
+    {
+        Application.logMessageReceived += HandleLog;
+    }
+
+    void OnDisable()
+    {
+        Application.logMessageReceived -= HandleLog;
+    }
+
+    void HandleLog(string logString, string stackTrace, LogType type)
+    {
+        myLog = logString;
+        string newString = "\n [" + type + "] : " + myLog;
+        myLogQueue.Enqueue(newString);
+        if (type == LogType.Exception)
+        {
+            newString = "\n" + stackTrace;
+            myLogQueue.Enqueue(newString);
+        }
+        myLog = string.Empty;
+        foreach (string mylog in myLogQueue)
+        {
+            myLog += mylog;
+        }
+        if (myLogQueue.Count > 50)
+            myLogQueue.Dequeue();
+    }
+
+    void OnGUI()
+    {
+        GUILayout.Label(myLog);
+    }*/
 }
