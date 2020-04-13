@@ -1720,6 +1720,61 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 819ad539fe4a6d6429659c479df03bd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &536569490
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 536569488}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74e9ccf0f80396c4e872809df1897f54, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnClientConnected:
+    m_PersistentCalls:
+      m_Calls: []
+  OnClientDataReceived:
+    m_PersistentCalls:
+      m_Calls: []
+  OnClientError:
+    m_PersistentCalls:
+      m_Calls: []
+  OnClientDisconnected:
+    m_PersistentCalls:
+      m_Calls: []
+  OnServerConnected:
+    m_PersistentCalls:
+      m_Calls: []
+  OnServerDataReceived:
+    m_PersistentCalls:
+      m_Calls: []
+  OnServerError:
+    m_PersistentCalls:
+      m_Calls: []
+  OnServerDisconnected:
+    m_PersistentCalls:
+      m_Calls: []
+  DebugEnabled: 0
+  ServerBindAll: 1
+  ServerBindAddress: 127.0.0.1
+  CommunicationPort: 7777
+  MaxPacketSizeInKb: 64
+  Channels: 0100000002000000
+  CustomMaxPeerLimit: 0
+  CustomMaxPeers: 1000
+  CustomTimeoutLimit: 0
+  CustomTimeoutBaseTicks: 5000
+  CustomTimeoutMultiplier: 3
+  PingCalculationEnabled: 1
+  PingCalculationFrameTimer: 120
+--- !u!82 &543577314 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 6658479360306231759, guid: 834c3835fbbeba74b85ae47f7d76842e,
+    type: 3}
+  m_PrefabInstance: {fileID: 6658479359672377504}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &568476713
 GameObject:
   m_ObjectHideFlags: 0
@@ -2259,7 +2314,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &689788890
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3363,13 +3418,13 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0.75
+  m_Value: 0.2
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1932771832}
-        m_MethodName: changeMusicVolume
-        m_Mode: 1
+      - m_Target: {fileID: 543577314}
+        m_MethodName: set_volume
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -3954,7 +4009,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -146}
-  m_SizeDelta: {x: 500, y: 220}
+  m_SizeDelta: {x: 500, y: 1000}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &975555394
 MonoBehaviour:
@@ -3981,7 +4036,7 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 2
     m_MaxSize: 40
-    m_Alignment: 1
+    m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
@@ -7891,7 +7946,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -9214,15 +9269,14 @@ MonoBehaviour:
 
     Sabin Kim - Music ''n Menus Man
 
-    Tamjid Hossain  - Scripter
-    Extraordinaire
+    Tamjid Hossain  - Scripter Extraordinaire
 
-    Amber  - Power Up Queen
+    Amber 
+    - Power Up Queen
 
     May Lawver  - The Corus
 
-    Ethan
-    Yu  - Don Quixote
+    Ethan Yu  - Don Quixote
 
 '
 --- !u!222 &2019113661
@@ -9718,6 +9772,11 @@ PrefabInstance:
       propertyPath: Loop
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6658479360306231759, guid: 834c3835fbbeba74b85ae47f7d76842e,
+        type: 3}
+      propertyPath: m_Volume
+      value: 0.1
+      objectReference: {fileID: 0}
     - target: {fileID: 6658479360306231760, guid: 834c3835fbbeba74b85ae47f7d76842e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -9793,6 +9852,21 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8111257610182996412, guid: dd222b27d9528434389c5072e0463854,
         type: 3}
+    - target: {fileID: 8503187717256107656, guid: f344e7bf9dfcdf241ae61ecc1699b69b,
+        type: 3}
+      propertyPath: maxConnections
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 8503187717256107656, guid: f344e7bf9dfcdf241ae61ecc1699b69b,
+        type: 3}
+      propertyPath: transport
+      value: 
+      objectReference: {fileID: 536569490}
+    - target: {fileID: 8503187717256107657, guid: f344e7bf9dfcdf241ae61ecc1699b69b,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8503187717256107659, guid: f344e7bf9dfcdf241ae61ecc1699b69b,
         type: 3}
       propertyPath: m_Name
@@ -9853,5 +9927,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8503187717256107657, guid: f344e7bf9dfcdf241ae61ecc1699b69b, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: f344e7bf9dfcdf241ae61ecc1699b69b, type: 3}

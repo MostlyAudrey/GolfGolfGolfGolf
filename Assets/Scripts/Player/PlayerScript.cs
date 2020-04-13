@@ -25,6 +25,7 @@ public class PlayerScript : NetworkBehaviour
     public float POINTER_LENGTH = 2.5e-03f;
     public float HIT_TIMER = .05f;
     public float BALL_STOPPING_SPEED = .5f;
+    public float CAMERA_SPEED = 5f;
     public PLAY_STATE play_state = PLAY_STATE.waiting_for_player;
     public PowerUp power_up;
     public int score = -1;
@@ -93,7 +94,7 @@ public class PlayerScript : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (managers == null)
+        if (!base.hasAuthority || managers == null)
             return;
         if (ball_rb == false)
         {
@@ -101,8 +102,8 @@ public class PlayerScript : NetworkBehaviour
             ball_rb.maxAngularVelocity = 100000;
         }
         BALL.GetComponent<MeshRenderer>().material.color = BALL_COLOR;
-        if (!base.hasAuthority)
-            return;
+        
+        Cmd_record_latency(DateTime.Now.Millisecond);
         //Tell all other clients your game state
         Cmd_publish_game_state(this.play_state, this.scores);
         _handle_tab();
@@ -353,7 +354,8 @@ public class PlayerScript : NetworkBehaviour
         {
             if (Input.GetKeyUp(KeyCode.R))
             {
-                Debug.Log("Resetting!!!");
+                if (play_state == PLAY_STATE.in_the_hole)
+                    return;
                 r_clicked = false;
                 //RESET LEVEL
                 this.score++;
@@ -422,7 +424,7 @@ public class PlayerScript : NetworkBehaviour
             }
             else
             {
-                CAMERA_OBJ.transform.Translate(2 * Vector3.forward * Time.deltaTime);
+                CAMERA_OBJ.transform.Translate(CAMERA_SPEED * Vector3.forward * Time.deltaTime);
             }
         }
         else if (s_clicked)
@@ -433,7 +435,7 @@ public class PlayerScript : NetworkBehaviour
             }
             else
             {
-                CAMERA_OBJ.transform.Translate(-2f * Vector3.forward * Time.deltaTime);
+                CAMERA_OBJ.transform.Translate(-1 * CAMERA_SPEED * Vector3.forward * Time.deltaTime);
             }
         }
         if (!s_clicked && Input.GetKeyDown(KeyCode.W))
@@ -456,7 +458,7 @@ public class PlayerScript : NetworkBehaviour
             }
             else
             {
-                CAMERA_OBJ.transform.Translate(-2 * Vector3.right * Time.deltaTime);
+                CAMERA_OBJ.transform.Translate(-1 * CAMERA_SPEED * Vector3.right * Time.deltaTime);
             }
         }
         else if (d_clicked)
@@ -467,7 +469,7 @@ public class PlayerScript : NetworkBehaviour
             }
             else
             {
-                CAMERA_OBJ.transform.Translate(2 * Vector3.right * Time.deltaTime);
+                CAMERA_OBJ.transform.Translate(CAMERA_SPEED * Vector3.right * Time.deltaTime);
             }
         }
         if (!d_clicked && Input.GetKeyDown(KeyCode.A))
@@ -487,7 +489,6 @@ public class PlayerScript : NetworkBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                Debug.Log("Using Powerup: " + power_up.name);
                 this.power_up.onUse(BALL);
                 if (this.power_up is FireProofPowerUp)
                 {
@@ -500,7 +501,6 @@ public class PlayerScript : NetworkBehaviour
     public void pickedUpPowerUp(PowerUp power_up) { this.power_up = power_up; }
     private void _resetOnDeath()
     {
-        Debug.Log("resetting from death");
         ball_rb.velocity = Vector3.zero;
         CAMERA_OBJ.transform.Translate(last_valid_position - BALL.transform.position);
         BALL.transform.position = last_valid_position;
@@ -539,6 +539,32 @@ public class PlayerScript : NetworkBehaviour
      * They call the ClientRpc method of all other clients
      * This is how all information has to be passed from 1 client to another
      *************************************************/
+
+    float rolling_avg = 0;
+    int records = 1;
+    int current_roll = DateTime.Now.Second;
+    int current_roll_minute = DateTime.Now.Minute;
+    [Command]
+    public void Cmd_record_latency(int clientTime) 
+    {
+        int millisecond = DateTime.Now.Millisecond;
+        int interval = (millisecond - clientTime);
+        if (interval < 0 )
+            interval = interval + 1000;
+        if (rolling_avg == 0)
+            rolling_avg = interval;
+        if ( current_roll == DateTime.Now.Second)
+            rolling_avg = ((rolling_avg * records) + interval) / ++records;
+        else
+        {
+            Debug.Log(PLAYER_NAME + ": " + current_roll_minute + ":" + current_roll + "," + rolling_avg);
+            rolling_avg = interval;
+            records = 1;
+            current_roll = DateTime.Now.Second;
+            current_roll_minute = DateTime.Now.Minute;
+        }
+    }
+
     [Command]
     public void Cmd_set_name_and_color(string name, Color color) { Rpc_set_name_and_color(name, color); }
 

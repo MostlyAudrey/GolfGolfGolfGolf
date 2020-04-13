@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.Networking;
 using Mirror;
@@ -14,10 +15,18 @@ public class MainGameController : MonoBehaviour
     public string name;
     public Color color;
     public string last_scene;
+    public bool p_clicked = false;
+    public bool show_debug = false;
+
+    private string path;
+    private string myLog;
+    Queue myLogQueue = new Queue();
 
     // Start is called before the first frame update
     void Start()
     {
+        path = Application.dataPath + "/Log.txt";
+        File.WriteAllText(path, "");
         NETWORK_MANAGER = GetComponent<NetworkManager>();
         last_scene = NetworkManager.networkSceneName;
     }
@@ -47,6 +56,17 @@ public class MainGameController : MonoBehaviour
             {
                 last_scene = NetworkManager.networkSceneName;
             }
+
+            if (p_clicked)
+            {
+                if (Input.GetKeyUp(KeyCode.P))
+                {
+                    p_clicked = false;
+                    show_debug = !show_debug;
+                }
+            }
+            else if (Input.GetKeyDown(KeyCode.P))
+                p_clicked = true;
         }
     }
 
@@ -86,8 +106,7 @@ public class MainGameController : MonoBehaviour
     public void start_client(string address) { NETWORK_MANAGER.StartClient(); NETWORK_MANAGER.networkAddress = address; }
     public void stop_client() { NETWORK_MANAGER.StopClient(); }
 
-    /*string myLog;
-    Queue myLogQueue = new Queue();
+    
     void OnEnable()
     {
         Application.logMessageReceived += HandleLog;
@@ -114,11 +133,22 @@ public class MainGameController : MonoBehaviour
             myLog += mylog;
         }
         if (myLogQueue.Count > 50)
-            myLogQueue.Dequeue();
+        {
+            File.AppendAllText(path, myLog);
+            myLogQueue.Clear();
+        }
+
     }
 
-    void OnGUI()
+    void OnGUI() { if (show_debug) GUILayout.Label(myLog); else GUILayout.Label("");  }
+
+    void OnApplicationQuit()
     {
-        GUILayout.Label(myLog);
-    }*/
+        string path = Application.dataPath + "/Log.txt";
+        if (!File.Exists(path))
+        {
+            File.WriteAllText(path, myLog);
+        }
+    }
+
 }

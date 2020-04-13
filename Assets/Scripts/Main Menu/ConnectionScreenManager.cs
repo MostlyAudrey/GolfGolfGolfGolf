@@ -54,6 +54,8 @@ public class ConnectionScreenManager : MonoBehaviour
     {
         if (PLAYER_NAME.text == "")
             PLAYER_NAME.placeholder.GetComponent<Text>().text = "Name Cannot Be Blank";
+        else if (PLAYER_NAME.text.Length > 20)
+            PLAYER_NAME.placeholder.GetComponent<Text>().text = "Name is too long";
         else
         {
             MAIN_GAME_CONTROLLER_OBJECT = GameObject.Find("Main Game Controller");
